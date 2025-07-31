@@ -1,0 +1,13 @@
+{
+  "itemGroup.evenmoreinstruments": "Example Mod Tab",
+  "block.evenmoreinstruments.example_block": "Example Block",
+  "item.evenmoreinstruments.example_item": "Example Item",
+
+  "evenmoreinstruments.configuration.title": "Even More Instruments! Configs",
+  "evenmoreinstruments.configuration.section.evenmoreinstruments.common.toml": "Even More Instruments! Configs",
+  "evenmoreinstruments.configuration.section.evenmoreinstruments.common.toml.title": "Even More Instruments! Configs",
+  "evenmoreinstruments.configuration.items": "Item List",
+  "evenmoreinstruments.configuration.logDirtBlock": "Log Dirt Block",
+  "evenmoreinstruments.configuration.magicNumberIntroduction": "Magic Number Text",
+  "evenmoreinstruments.configuration.magicNumber": "Magic Number"
+}
