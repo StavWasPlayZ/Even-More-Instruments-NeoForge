@@ -1,0 +1,14 @@
+{
+    "required": false,
+	"package": "com.cstav.evenmoreinstruments.mixins.optional",
+	"compatibilityLevel": "JAVA_21",
+	"refmap": "mixins.evenmoreinstruments.refmap.json",
+
+	"client": [
+        "ParrotLooperDanceInjector"
+    ],
+
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

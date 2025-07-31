@@ -1,0 +1,17 @@
+{
+    "required": true,
+	"package": "com.cstav.evenmoreinstruments.mixins.required",
+	"compatibilityLevel": "JAVA_21",
+	"refmap": "mixins.evenmoreinstruments.refmap.json",
+
+	"client": [
+        "ScreenAccessor"
+	],
+
+	"overwrites": {
+		"requireAnnotations": true
+	},
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

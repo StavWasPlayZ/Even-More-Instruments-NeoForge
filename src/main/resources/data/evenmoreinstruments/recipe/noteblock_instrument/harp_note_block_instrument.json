@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#",
+        "N",
+        " "
+    ],
+
+    "key": {
+        "#": {
+            "item": "minecraft:string"
+        },
+        "N": {
+            "item": "minecraft:note_block"
+        }
+    },
+
+    "group": "evenmoreinstruments:noteblock_instruments",
+
+    "result": {
+        "id": "evenmoreinstruments:harp_note_block_instrument",
+        "count": 1
+    }
+}
