@@ -4,8 +4,8 @@ import com.cstav.evenmoreinstruments.client.KeyMappings;
 import com.cstav.genshinstrument.client.gui.screen.instrument.partial.grid.GridInstrumentScreen;
 import com.cstav.genshinstrument.client.gui.screen.options.instrument.partial.SoundTypeOptionsScreen;
 import com.cstav.genshinstrument.sound.NoteSound;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 /**
  * A class defining the usage of cyclable sounds within this instrument.

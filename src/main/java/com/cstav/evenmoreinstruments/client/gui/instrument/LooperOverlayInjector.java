@@ -4,10 +4,10 @@ import com.cstav.evenmoreinstruments.EMIMain;
 import com.cstav.evenmoreinstruments.client.KeyMappings;
 import com.cstav.evenmoreinstruments.mixins.required.ScreenAccessor;
 import com.cstav.evenmoreinstruments.networking.EMIPacketHandler;
-import com.cstav.evenmoreinstruments.networking.packet.DoesLooperExistPacket;
-import com.cstav.evenmoreinstruments.networking.packet.LooperRecordStatePacket;
+import com.cstav.evenmoreinstruments.networking.packet.c2s.DoesLooperExistPacket;
+import com.cstav.evenmoreinstruments.networking.packet.c2s.LooperRecordStatePacket;
 import com.cstav.evenmoreinstruments.util.LooperUtil;
-import com.cstav.genshinstrument.capability.instrumentOpen.InstrumentOpenProvider;
+import com.cstav.genshinstrument.attachment.instrumentopen.InstrumentOpenProvider;
 import com.cstav.genshinstrument.client.gui.screen.instrument.partial.InstrumentScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -19,13 +19,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ScreenEvent;
 
-@EventBusSubscriber(bus = Bus.FORGE, modid = EMIMain.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = EMIMain.MODID, value = Dist.CLIENT)
 public class LooperOverlayInjector {
     private static final int REC_BTN_WIDTH = 120;
 

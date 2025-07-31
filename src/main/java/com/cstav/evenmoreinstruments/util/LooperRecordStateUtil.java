@@ -3,9 +3,9 @@ package com.cstav.evenmoreinstruments.util;
 import com.cstav.evenmoreinstruments.EMIMain;
 import com.cstav.evenmoreinstruments.block.blockentity.LooperBlockEntity;
 import com.cstav.evenmoreinstruments.networking.EMIPacketHandler;
-import com.cstav.evenmoreinstruments.networking.packet.LooperUnplayablePacket;
-import com.cstav.evenmoreinstruments.networking.packet.SyncModTagPacket;
-import com.cstav.genshinstrument.capability.instrumentOpen.InstrumentOpenProvider;
+import com.cstav.evenmoreinstruments.networking.packet.s2c.LooperUnplayablePacket;
+import com.cstav.evenmoreinstruments.networking.packet.s2c.SyncModTagPacket;
+import com.cstav.genshinstrument.attachment.instrumentopen.InstrumentOpenProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -98,7 +98,7 @@ public class LooperRecordStateUtil {
     }
 
     private static void notifyLooperUnplayable(final ServerPlayer player) {
-        EMIPacketHandler.sendToClient(new LooperUnplayablePacket(), player);
+        EMIPacketHandler.sendToClient(LooperUnplayablePacket.INSTANCE, player);
     }
 
 }

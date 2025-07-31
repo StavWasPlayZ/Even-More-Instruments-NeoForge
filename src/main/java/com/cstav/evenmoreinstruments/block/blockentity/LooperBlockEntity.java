@@ -1,17 +1,17 @@
 package com.cstav.evenmoreinstruments.block.blockentity;
 
 import com.cstav.evenmoreinstruments.EMIMain;
+import com.cstav.evenmoreinstruments.attachments.recording.RecordingCapabilityProvider;
 import com.cstav.evenmoreinstruments.block.LooperBlock;
 import com.cstav.evenmoreinstruments.block.ModBlocks;
 import com.cstav.evenmoreinstruments.block.util.WritableNoteType;
-import com.cstav.evenmoreinstruments.capability.recording.RecordingCapabilityProvider;
 import com.cstav.evenmoreinstruments.gamerule.ModGameRules;
 import com.cstav.evenmoreinstruments.item.ModItems;
 import com.cstav.evenmoreinstruments.item.component.ModDataComponents;
 import com.cstav.evenmoreinstruments.item.emirecord.EMIRecordItem;
 import com.cstav.evenmoreinstruments.item.emirecord.RecordRepository;
 import com.cstav.evenmoreinstruments.networking.EMIPacketHandler;
-import com.cstav.evenmoreinstruments.networking.packet.LooperPlayStatePacket;
+import com.cstav.evenmoreinstruments.networking.packet.s2c.LooperPlayStatePacket;
 import com.cstav.evenmoreinstruments.util.CommonUtil;
 import com.cstav.evenmoreinstruments.util.LooperUtil;
 import com.cstav.genshinstrument.networking.packet.instrument.NoteSoundMetadata;
@@ -40,10 +40,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.ticks.ContainerSingleItem;
-import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -52,7 +51,7 @@ import java.util.Optional;
 
 import static com.cstav.evenmoreinstruments.item.emirecord.BurnedRecordItem.*;
 
-@EventBusSubscriber(bus = Bus.FORGE, modid = EMIMain.MODID)
+@EventBusSubscriber(modid = EMIMain.MODID)
 public class LooperBlockEntity extends BlockEntity implements ContainerSingleItem {
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -105,8 +104,8 @@ public class LooperBlockEntity extends BlockEntity implements ContainerSingleIte
      * Retrieves the channel (footage) information from the inserted record
      */
     private void updateChannel() {
-        if (recordIn.has(ModDataComponents.CHANNNEL.get())) {
-            setChannel(recordIn.get(ModDataComponents.CHANNNEL.get()).getUnsafe());
+        if (recordIn.has(ModDataComponents.CHANNEL.get())) {
+            setChannel(recordIn.get(ModDataComponents.CHANNEL.get()).getUnsafe());
         }
         else if (recordIn.has(ModDataComponents.BURNED_MEDIA.get())) {
             setChannel(RecordRepository.getRecord(getBurnedMediaLoc()).orElse(null));
@@ -556,7 +555,7 @@ public class LooperBlockEntity extends BlockEntity implements ContainerSingleIte
                 getRecordData().remove(NOTES_TAG);
             // Empty record; empty data.
             if (!hasFootage())
-                recordIn.remove(ModDataComponents.CHANNNEL.get());
+                recordIn.remove(ModDataComponents.CHANNEL.get());
         }
 
         stopAndClearHeldSounds();

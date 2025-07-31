@@ -14,19 +14,15 @@ import com.cstav.genshinstrument.client.gui.screen.instrument.InstrumentScreenRe
 import com.cstav.genshinstrument.client.gui.screen.instrument.partial.InstrumentScreen;
 import com.cstav.genshinstrument.util.CommonUtil;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.config.ModConfig.Type;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig.Type;
 
 import java.util.Map;
 import java.util.function.Supplier;
 
-@EventBusSubscriber(value = Dist.CLIENT, bus = Bus.MOD, modid = EMIMain.MODID)
+@Mod(value = EMIMain.MODID, dist = Dist.CLIENT)
 public class ClientInitiator {
 
     private static final Class<?>[] LOAD_ME = new Class[] {
@@ -47,15 +43,11 @@ public class ClientInitiator {
         SaxophoneScreen.INSTRUMENT_ID, SaxophoneScreen::new
     );
 
-    @SubscribeEvent
-    public static void setupClient(final FMLClientSetupEvent event) {
+    public ClientInitiator(final ModContainer container) {
         CommonUtil.loadClasses(LOAD_ME);
         InstrumentScreenRegistry.register(INSTRUMENTS);
-    }
 
-    @SubscribeEvent
-    public static void registerConfigs(final FMLConstructModEvent event) {
-        ModLoadingContext.get().registerConfig(Type.CLIENT, ModClientConfigs.CONFIGS, "evenmore_instrument_configs.toml");
+        container.registerConfig(Type.CLIENT, ModClientConfigs.CONFIGS);
     }
 
 }

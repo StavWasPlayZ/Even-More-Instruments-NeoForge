@@ -3,18 +3,20 @@ package com.cstav.evenmoreinstruments.sound;
 import com.cstav.evenmoreinstruments.EMIMain;
 import com.cstav.genshinstrument.sound.NoteSound;
 import com.cstav.genshinstrument.sound.registrar.NoteSoundRegistrar;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.HashMap;
 
 public class ModSounds {
     
-    public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, EMIMain.MODID);
+    public static final DeferredRegister<SoundEvent> SOUNDS =
+        DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, EMIMain.MODID);
+
     public static void register(final IEventBus bus) {
         SOUNDS.register(bus);
     }
@@ -52,7 +54,7 @@ public class ModSounds {
         final NoteSoundRegistrar registrar = nsr(loc("note_block_instrument"));
 
         for (NoteBlockInstrument noteSound : NoteBlockInstrument.values()) {
-            registrar.chain(noteSound.getSoundEvent().get().getLocation())
+            registrar.chain(noteSound.getSoundEvent().value().getLocation())
                 .alreadyRegistered()
                 .add();
             NOTEBLOCK_SOUNDS.put(noteSound, registrar.peek());

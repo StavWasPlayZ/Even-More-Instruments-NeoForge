@@ -17,15 +17,13 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,17 +31,19 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-@EventBusSubscriber(modid = EMIMain.MODID, bus = Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = EMIMain.MODID, value = Dist.CLIENT)
 public class ModItems {
 
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, EMIMain.MODID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.createItems(EMIMain.MODID);
     public static void register(final IEventBus bus) {
         ITEMS.register(bus);
     }
 
 
-    private static final LinkedHashMap<ResourceKey<CreativeModeTab>, ArrayList<RegistryObject<Item>>> CREATIVE_TABS_MAP = new LinkedHashMap<>();
-    private static ArrayList<RegistryObject<Item>> getCreativeItems(final ResourceKey<CreativeModeTab> tabKey) {
+    private static final LinkedHashMap<ResourceKey<CreativeModeTab>, ArrayList<DeferredHolder<Item, Item>>>
+        CREATIVE_TABS_MAP = new LinkedHashMap<>();
+
+    private static ArrayList<DeferredHolder<Item, Item>> getCreativeItems(final ResourceKey<CreativeModeTab> tabKey) {
         if (!CREATIVE_TABS_MAP.containsKey(tabKey))
             CREATIVE_TABS_MAP.put(tabKey, new ArrayList<>());
         return CREATIVE_TABS_MAP.get(tabKey);
@@ -59,7 +59,7 @@ public class ModItems {
     };
 
 
-    public static final RegistryObject<Item>
+    public static final DeferredHolder<Item, Item>
         VIOLIN_BOW = register("violin_bow",
             () -> new InstrumentAccessoryItem(
                 new Properties().stacksTo(1).durability(InstrumentAccessoryItem.MAX_DURABILITY)
@@ -189,11 +189,12 @@ public class ModItems {
         )
     ;
 
-    public static final Map<NoteBlockInstrument, RegistryObject<Item>> NOTEBLOCK_INSTRUMENTS = initNoteBlockInstruments();
+    public static final Map<NoteBlockInstrument, DeferredHolder<Item, Item>> NOTEBLOCK_INSTRUMENTS =
+        initNoteBlockInstruments();
 
-    public static HashMap<NoteBlockInstrument, RegistryObject<Item>> initNoteBlockInstruments() {
+    public static HashMap<NoteBlockInstrument, DeferredHolder<Item, Item>> initNoteBlockInstruments() {
         final NoteBlockInstrument[] instruments = NoteBlockInstrument.values();
-        final HashMap<NoteBlockInstrument, RegistryObject<Item>> result = new HashMap<>(instruments.length);
+        final HashMap<NoteBlockInstrument, DeferredHolder<Item, Item>> result = new HashMap<>(instruments.length);
 
         for (final NoteBlockInstrument instrument : instruments) {
             if (!instrument.isTunable())
@@ -215,11 +216,11 @@ public class ModItems {
     }
 
 
-    // private static RegistryObject<Item> registerBlockItem(final RegistryObject<Block> block) {
+    // private static DeferredHolder<Item, Item> registerBlockItem(final DeferredHolder<Block> block) {
     //     return registerBlockItem(block, DEFAULT_INSTRUMENT_BLOCK_TABS);
     // }
     @SafeVarargs
-    private static RegistryObject<Item> registerBlockItem(RegistryObject<Block> block, ResourceKey<CreativeModeTab>... tabs) {
+    private static DeferredHolder<Item, Item> registerBlockItem(DeferredHolder<Block, Block> block, ResourceKey<CreativeModeTab>... tabs) {
         return register(
             block.getId().getPath(),
             () -> new BlockItem(block.get(), new Properties()),
@@ -227,12 +228,12 @@ public class ModItems {
         );
     }
 
-    private static RegistryObject<Item> register(String name, Supplier<Item> supplier, ResourceKey<CreativeModeTab>[] tabs,
-                                                 RegistryObject<Item> appearsBefore) {
-        final RegistryObject<Item> item = ITEMS.register(name, supplier);
+    private static DeferredHolder<Item, Item> register(String name, Supplier<Item> supplier, ResourceKey<CreativeModeTab>[] tabs,
+                                                 DeferredHolder<Item, Item> appearsBefore) {
+        final DeferredHolder<Item, Item> item = ITEMS.register(name, supplier);
 
         for (final ResourceKey<CreativeModeTab> tabKey : tabs) {
-            final ArrayList<RegistryObject<Item>> items = getCreativeItems(tabKey);
+            final ArrayList<DeferredHolder<Item, Item>> items = getCreativeItems(tabKey);
             if (items.contains(appearsBefore)) {
                 items.add(items.indexOf(appearsBefore), item);
             } else {
@@ -243,8 +244,8 @@ public class ModItems {
         return item;
     }
     @SafeVarargs
-    private static RegistryObject<Item> register(String name, Supplier<Item> supplier, ResourceKey<CreativeModeTab>... tabs) {
-        final RegistryObject<Item> item = ITEMS.register(name, supplier);
+    private static DeferredHolder<Item, Item> register(String name, Supplier<Item> supplier, ResourceKey<CreativeModeTab>... tabs) {
+        final DeferredHolder<Item, Item> item = ITEMS.register(name, supplier);
 
         for (final ResourceKey<CreativeModeTab> tabKey: tabs) {
             getCreativeItems(tabKey).add(item);
@@ -252,7 +253,7 @@ public class ModItems {
 
         return item;
     }
-    private static RegistryObject<Item> register(String name, Supplier<Item> supplier) {
+    private static DeferredHolder<Item, Item> register(String name, Supplier<Item> supplier) {
         return register(name, supplier, DEFAULT_INSTRUMENTS_TABS);
     }
 

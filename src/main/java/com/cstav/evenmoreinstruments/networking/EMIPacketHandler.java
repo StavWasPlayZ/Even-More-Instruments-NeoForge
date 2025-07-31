@@ -1,56 +1,55 @@
 package com.cstav.evenmoreinstruments.networking;
 
 import com.cstav.evenmoreinstruments.EMIMain;
-import com.cstav.evenmoreinstruments.networking.packet.*;
+import com.cstav.evenmoreinstruments.networking.packet.c2s.DoesLooperExistPacket;
+import com.cstav.evenmoreinstruments.networking.packet.c2s.LooperRecordStatePacket;
+import com.cstav.evenmoreinstruments.networking.packet.s2c.LooperPlayStatePacket;
+import com.cstav.evenmoreinstruments.networking.packet.s2c.LooperUnplayablePacket;
+import com.cstav.evenmoreinstruments.networking.packet.s2c.OpenNoteBlockInstrumentPacket;
+import com.cstav.evenmoreinstruments.networking.packet.s2c.SyncModTagPacket;
 import com.cstav.genshinstrument.networking.IModPacket;
 import com.cstav.genshinstrument.util.ServerUtil;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.network.Channel.VersionTest;
-import net.minecraftforge.network.ChannelBuilder;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.SimpleChannel;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 import java.util.List;
 
 // Copy pasta
-@EventBusSubscriber(modid = EMIMain.MODID, bus = Bus.MOD)
+@EventBusSubscriber(modid = EMIMain.MODID)
 public class EMIPacketHandler {
     @SuppressWarnings("unchecked")
-    private static final List<Class<IModPacket>> ACCEPTABLE_PACKETS = List.of(new Class[] {
-        LooperRecordStatePacket.class, OpenNoteBlockInstrumentPacket.class,
-        // Sync stuff
-        DoesLooperExistPacket.class, LooperUnplayablePacket.class, SyncModTagPacket.class,
-        LooperPlayStatePacket.class
+    private static final List<Class<IModPacket>> ACCEPTABLE_PACKETS_C2S = List.of(new Class[] {
+        DoesLooperExistPacket.class,
+        LooperRecordStatePacket.class
     });
-
-    private static int id = 0;
-    public static void registerPackets() {
-        ServerUtil.registerModPackets(INSTANCE, ACCEPTABLE_PACKETS, () -> id++);
-    }
+    @SuppressWarnings("unchecked")
+    private static final List<Class<IModPacket>> ACCEPTABLE_PACKETS_S2C = List.of(new Class[] {
+        OpenNoteBlockInstrumentPacket.class,
+        LooperUnplayablePacket.class,
+        LooperPlayStatePacket.class,
+        SyncModTagPacket.class
+    });
 
 
     private static final String PROTOCOL_VERSION = "1.1";
+    private static final PayloadRegistrar payloadRegistrar = new PayloadRegistrar(PROTOCOL_VERSION);
 
-    private static int protocolVersion() {
-        return Integer.parseInt(PROTOCOL_VERSION.replace(".", ""));
+    @SubscribeEvent
+    public static void onPayloadRegistration(final RegisterPayloadHandlersEvent event) {
+        ServerUtil.registerC2SPackets(ACCEPTABLE_PACKETS_C2S, payloadRegistrar);
+        ServerUtil.registerS2CPackets(ACCEPTABLE_PACKETS_S2C, () -> ClientDistExecutor.PACKET_SWITCH, payloadRegistrar);
     }
 
 
-    private static final SimpleChannel INSTANCE = ChannelBuilder
-        .named(EMIMain.loc("mod_networking"))
-        .networkProtocolVersion(protocolVersion())
-        .acceptedVersions(VersionTest.exact(protocolVersion()))
-    .simpleChannel();
-
-
-    public static <T> void sendToServer(final T packet) {
-        INSTANCE.send(packet, PacketDistributor.SERVER.noArg());
+    public static void sendToServer(final IModPacket packet) {
+        PacketDistributor.sendToServer(packet);
     }
-    public static <T> void sendToClient(final T packet, final ServerPlayer player) {
-        INSTANCE.send(packet, PacketDistributor.PLAYER.with(player));
+    public static void sendToClient(final IModPacket packet, final ServerPlayer player) {
+        PacketDistributor.sendToPlayer(player, packet);
     }
 
 }

@@ -7,9 +7,8 @@ import com.cstav.genshinstrument.event.InstrumentPlayedEvent;
 import com.cstav.genshinstrument.event.NoteSoundPlayedEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.Optional;
 
@@ -19,7 +18,7 @@ import static com.cstav.evenmoreinstruments.item.emirecord.EMIRecordItem.INSTRUM
  * Listens to instrument played events
  * and writes it to a matching looper.
  */
-@EventBusSubscriber(bus = Bus.FORGE, modid = EMIMain.MODID)
+@EventBusSubscriber(modid = EMIMain.MODID)
 public class LooperNoteListener {
 
     @SubscribeEvent

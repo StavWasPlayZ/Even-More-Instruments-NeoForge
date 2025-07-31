@@ -2,22 +2,21 @@ package com.cstav.evenmoreinstruments.loot;
 
 import com.cstav.evenmoreinstruments.EMIMain;
 import com.cstav.evenmoreinstruments.item.ModItems;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
-import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.LootTableLoadEvent;
 
 import java.util.Map;
 import java.util.function.Supplier;
 
-@EventBusSubscriber(modid = EMIMain.MODID, bus = Bus.FORGE)
+@EventBusSubscriber(modid = EMIMain.MODID)
 public class ModLootTables {
     private static final float RECORD_DROP_PROBABILITY = .056f;
 
@@ -31,7 +30,7 @@ public class ModLootTables {
 
     private static LootPool createRecordPool(final Item item) {
         return LootPool.lootPool()
-            .name("emi_"+ ForgeRegistries.ITEMS.getKey(item).getPath())
+            .name("emi_"+ BuiltInRegistries.ITEM.getKey(item).getPath())
             .add(
                 LootItem.lootTableItem(item)
                     .when(LootItemRandomChanceCondition.randomChance(RECORD_DROP_PROBABILITY))

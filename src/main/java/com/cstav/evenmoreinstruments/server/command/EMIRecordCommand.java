@@ -113,7 +113,7 @@ public class EMIRecordCommand {
 
 
 //        final CompoundTag channelTag = record.get().getTagElement(WritableRecordItem.CHANNEL_TAG);
-        final CustomData channelTag = record.get().get(ModDataComponents.CHANNNEL.get());
+        final CustomData channelTag = record.get().get(ModDataComponents.CHANNEL.get());
         if (channelTag == null) {
 
             if (record.get().has(ModDataComponents.BURNED_MEDIA.get())) {

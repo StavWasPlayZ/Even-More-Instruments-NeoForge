@@ -7,8 +7,8 @@ import com.cstav.evenmoreinstruments.client.gui.options.partial.CyclableSoundTyp
 import com.cstav.genshinstrument.client.gui.screen.instrument.partial.InstrumentScreen;
 import com.cstav.genshinstrument.client.gui.screen.instrument.partial.grid.GridInstrumentScreen;
 import com.cstav.genshinstrument.client.util.TogglablePedalSound;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ViolinOptionsScreen extends CyclableSoundTypeInstrumentOptionsScreen<ViolinSoundType> {

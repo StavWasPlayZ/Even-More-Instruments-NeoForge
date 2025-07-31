@@ -15,8 +15,8 @@ public class WritableRecordItem extends EMIRecordItem {
     }
 
     public boolean isBurned(final ItemStack stack) {
-        return (stack.has(ModDataComponents.CHANNNEL.get()) &&
-            !stack.get(ModDataComponents.CHANNNEL.get()).getUnsafe().getBoolean(WRITABLE_TAG))
+        return (stack.has(ModDataComponents.CHANNEL.get()) &&
+            !stack.get(ModDataComponents.CHANNEL.get()).getUnsafe().getBoolean(WRITABLE_TAG))
             // May also be media burned
             || stack.has(ModDataComponents.BURNED_MEDIA.get());
     }
@@ -31,7 +31,7 @@ public class WritableRecordItem extends EMIRecordItem {
         if (stack.has(ModDataComponents.BURNED_MEDIA.get()))
             return;
 
-        final CustomData channelRaw = stack.get(ModDataComponents.CHANNNEL.get());
+        final CustomData channelRaw = stack.get(ModDataComponents.CHANNEL.get());
         CompoundTag channel;
 
         if (channelRaw == null) {
@@ -46,7 +46,7 @@ public class WritableRecordItem extends EMIRecordItem {
             }
         }
 
-        stack.set(ModDataComponents.CHANNNEL.get(), CustomData.of(channel));
+        stack.set(ModDataComponents.CHANNEL.get(), CustomData.of(channel));
     }
 
     @Override

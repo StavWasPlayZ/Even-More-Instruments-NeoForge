@@ -13,14 +13,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 /**
  * An instrument that requires the usage of a {@link InstrumentAccessoryItem}
  */
-@EventBusSubscriber(modid = EMIMain.MODID, bus = Bus.FORGE)
+@EventBusSubscriber(modid = EMIMain.MODID)
 public class AccessoryInstrumentItem extends CreditableInstrumentItem {
     private final InstrumentAccessoryItem accessory;
 

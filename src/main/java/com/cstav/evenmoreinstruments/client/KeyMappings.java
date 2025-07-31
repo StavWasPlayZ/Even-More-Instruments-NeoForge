@@ -4,15 +4,14 @@ import com.cstav.evenmoreinstruments.EMIMain;
 import com.cstav.genshinstrument.client.keyMaps.InstrumentKeyMappings;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.common.util.Lazy;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.common.util.Lazy;
 import org.lwjgl.glfw.GLFW;
 
-@EventBusSubscriber(bus = Bus.MOD, modid = EMIMain.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = EMIMain.MODID, value = Dist.CLIENT)
 public class KeyMappings {
     public static final String CATEGORY = EMIMain.MODID+".keymaps";
     

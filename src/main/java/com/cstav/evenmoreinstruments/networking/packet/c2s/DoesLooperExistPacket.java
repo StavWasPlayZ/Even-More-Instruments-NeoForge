@@ -1,25 +1,34 @@
-package com.cstav.evenmoreinstruments.networking.packet;
+package com.cstav.evenmoreinstruments.networking.packet.c2s;
 
 import com.cstav.evenmoreinstruments.EMIMain;
 import com.cstav.evenmoreinstruments.block.blockentity.LooperBlockEntity;
 import com.cstav.evenmoreinstruments.networking.EMIPacketHandler;
+import com.cstav.evenmoreinstruments.networking.packet.s2c.LooperUnplayablePacket;
+import com.cstav.evenmoreinstruments.networking.packet.s2c.SyncModTagPacket;
 import com.cstav.evenmoreinstruments.util.LooperUtil;
-import com.cstav.genshinstrument.capability.instrumentOpen.InstrumentOpenProvider;
+import com.cstav.genshinstrument.attachment.instrumentopen.InstrumentOpenProvider;
 import com.cstav.genshinstrument.networking.IModPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.event.network.CustomPayloadEvent.Context;
-import net.minecraftforge.network.NetworkDirection;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.Optional;
 
-public class DoesLooperExistPacket implements IModPacket {
-    public static final NetworkDirection NETWORK_DIRECTION = NetworkDirection.PLAY_TO_SERVER;
+public class DoesLooperExistPacket extends IModPacket {
+    public static final String MOD_ID = EMIMain.MODID;
+    public static final StreamCodec<RegistryFriendlyByteBuf, DoesLooperExistPacket> CODEC = CustomPacketPayload.codec(
+        DoesLooperExistPacket::write,
+        DoesLooperExistPacket::new
+    );
+
     public static final int MAX_RECORD_DIST = 8;
 
     final Optional<InteractionHand> hand;
@@ -38,13 +47,13 @@ public class DoesLooperExistPacket implements IModPacket {
     }
 
     @Override
-    public void write(final FriendlyByteBuf buf) {
+    public void write(final RegistryFriendlyByteBuf buf) {
         buf.writeOptional(hand, FriendlyByteBuf::writeEnum);
     }
 
     @Override
-    public void handle(final Context context) {
-        final ServerPlayer player = context.getSender();
+    public void handleServer(final IPayloadContext context) {
+        final ServerPlayer player = (ServerPlayer) context.player();
         final Level level = player.level();
 
         LooperBlockEntity looperBE;
@@ -74,7 +83,7 @@ public class DoesLooperExistPacket implements IModPacket {
         }
 
         if (looperBE == null)
-            EMIPacketHandler.sendToClient(new LooperUnplayablePacket(), player);
+            EMIPacketHandler.sendToClient(LooperUnplayablePacket.INSTANCE, player);
     }
     
 }

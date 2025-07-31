@@ -1,12 +1,14 @@
-package com.cstav.evenmoreinstruments.capability.recording;
+package com.cstav.evenmoreinstruments.attachments.recording;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraftforge.common.capabilities.AutoRegisterCapability;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnknownNullability;
 
-@AutoRegisterCapability
-public class RecordingCapability {
+public class RecordingData implements INBTSerializable<CompoundTag> {
     public static final String
         RECORDING_TAG = "Recording",
         REC_POS_TAG = "LooperPos"
@@ -31,14 +33,20 @@ public class RecordingCapability {
         return looperPos;
     }
 
-    public void saveNBTData(final CompoundTag nbt) {
+    @Override
+    public @UnknownNullability CompoundTag serializeNBT(@NotNull Provider provider) {
+        final CompoundTag nbt = new CompoundTag();
+
         nbt.putBoolean(RECORDING_TAG, isRecording);
         if (looperPos != null)
             nbt.put(REC_POS_TAG, NbtUtils.writeBlockPos(looperPos));
+
+        return nbt;
     }
-    public void loadNBTData(final CompoundTag nbt) {
+
+    @Override
+    public void deserializeNBT(@NotNull Provider provider, @NotNull CompoundTag nbt) {
         isRecording = nbt.getBoolean(RECORDING_TAG);
         looperPos = NbtUtils.readBlockPos(nbt, REC_POS_TAG).orElse(null);
     }
-
 }

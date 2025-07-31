@@ -4,11 +4,10 @@ import com.cstav.evenmoreinstruments.EMIMain;
 import com.cstav.evenmoreinstruments.util.LooperRecordStateUtil;
 import com.cstav.genshinstrument.event.InstrumentOpenStateChangedEvent;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@EventBusSubscriber(bus = Bus.FORGE, modid = EMIMain.MODID)
+@EventBusSubscriber(modid = EMIMain.MODID)
 public class ServerEvents {
 
     @SubscribeEvent
