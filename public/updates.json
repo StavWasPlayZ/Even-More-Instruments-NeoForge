@@ -1,0 +1,12 @@
+{
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/even-more-instruments",
+
+    "1.21.1": {
+        "5.1": "NeoForge release"
+    },
+
+    "promos": {
+        "1.21.1-latest": "5.1",
+        "1.21.1-recommended": "5.1"
+    }
+}
